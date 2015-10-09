@@ -1,11 +1,32 @@
 import './style/style.less';
 import React from 'react';
+import Lang from './Lang';
 
 export default class EuCookies extends React.Component {
 
 	constructor(props) {
 	    super(props);
-	    this.state = {show: true, showHideEffect: false, height: 0};
+	    this.state = {
+	    	show: true, 
+	    	showHideEffect: false, 
+	    	height: 0,
+	    	lang: this.getLanguage(props.lang)
+	    };
+  	}
+
+
+  	getLanguage(forced) {
+  		let lang = (navigator.language || navigator.userLanguage).substring(0,2);
+
+  		if(typeof forced != "undefined") {
+  			lang = forced;
+  		}
+ 
+  		if(typeof Lang[lang] == "undefined") {
+  			lang = "en";
+		}
+
+  		return lang;
   	}
 
 
@@ -17,7 +38,7 @@ export default class EuCookies extends React.Component {
 
 
   	setHideToCookies() {
-  		var date = new Date();
+  		let date = new Date();
 	    date.setFullYear(date.getFullYear() + 10);
 	    document.cookie = 'euCookiesAccepted=1; path=/; expires=' + date.toGMTString();
   	}
@@ -62,10 +83,9 @@ export default class EuCookies extends React.Component {
 
 		return  <div className={divClass} style={height}>
 					<div>
-						Tento web používá k poskytování služeb, personalizaci reklam a analýze
-						návštěvnosti soubory cookie. Používáním tohoto webu s tím souhlasíte.
-						<button onClick={this.cookiesAccepted.bind(this)}>V pořádku</button>
-						<a href="https://www.google.com/policies/technologies/cookies/" target="_blank">Další informace</a>
+						{Lang[this.state.lang].text}
+						<button onClick={this.cookiesAccepted.bind(this)}>{Lang[this.state.lang].btn}</button>
+						<a href="http://www.aboutcookies.org/default.aspx?page=5" target="_blank">{Lang[this.state.lang].link}</a>
 					</div>
 				</div>;
   }
