@@ -45,7 +45,7 @@ export default class EuCookies extends React.Component {
 
 
   	getCookies() {
-		var cookies = {};
+		let cookies = {};
 		for (let cookie of document.cookie.split('; ')) {
 			let [name, value] = cookie.split("=");
 			cookies[name] = decodeURIComponent(value);
@@ -64,6 +64,21 @@ export default class EuCookies extends React.Component {
 
   	componentDidMount() {
   		this.setState({height: React.findDOMNode(this).offsetHeight});
+
+  		window.resizeTimeOut = null;
+
+		window.onresize = () => {
+
+		    if (window.resizeTimeOut != null)
+		        clearTimeout(window.resizeTimeOut);
+
+		    window.resizeTimeOut = setTimeout(() => {
+		    	this.setState({height: 0});
+		    	setTimeout(() => {this.setState({height: React.findDOMNode(this).offsetHeight})}, 100);
+		    }, 400);
+		     
+
+		}.bind(this);
   	}
 
 
@@ -74,10 +89,10 @@ export default class EuCookies extends React.Component {
 		}
 
 
-		var divClass = "eu-cookies";
+		let divClass = "eu-cookies";
 		divClass += this.state.showHideEffect ? " hide" : "";
 
-		var height = {
+		let height = {
 			height: this.state.height > 0 ? this.state.height : "auto"
 		};
 
