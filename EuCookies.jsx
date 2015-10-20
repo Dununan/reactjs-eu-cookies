@@ -1,4 +1,5 @@
 import './style/style.less';
+import 'babel-core/polyfill';
 import React from 'react';
 import Lang from './Lang';
 
@@ -79,6 +80,13 @@ export default class EuCookies extends React.Component {
 		     
 
 		}.bind(this);
+
+		//IE8 and older Fix
+		if(typeof Array.isArray == "undefined") {
+			Array.isArray = function (obj) {
+    			return Object.prototype.toString.call(obj) === "[object Array]";
+			};
+		}
   	}
 
 
