@@ -1,4 +1,4 @@
-import './style/style.less';
+// import './style/style.less';
 import 'babel-core/polyfill';
 import React from 'react';
 import Lang from './Lang';
@@ -55,6 +55,17 @@ export default class EuCookies extends React.Component {
 	}
 
 
+	onResizeWindow() {
+		if (window.resizeTimeOut != null)
+		        clearTimeout(window.resizeTimeOut);
+
+	    window.resizeTimeOut = setTimeout(() => {
+	    	this.setState({height: 0});
+	    	setTimeout(() => {this.setState({height: React.findDOMNode(this).offsetHeight})}, 100);
+	    }, 400);
+	}
+
+
 	componentWillMount() {
 		let cookies = this.getCookies();
 		if(cookies.euCookiesAccepted == 1) {
@@ -68,18 +79,7 @@ export default class EuCookies extends React.Component {
 
   		window.resizeTimeOut = null;
 
-		window.onresize = () => {
-
-		    if (window.resizeTimeOut != null)
-		        clearTimeout(window.resizeTimeOut);
-
-		    window.resizeTimeOut = setTimeout(() => {
-		    	this.setState({height: 0});
-		    	setTimeout(() => {this.setState({height: React.findDOMNode(this).offsetHeight})}, 100);
-		    }, 400);
-		     
-
-		}.bind(this);
+		window.onresize = () => this.onResizeWindow.bind(this);
 
 		//IE8 and older Fix
 		if(typeof Array.isArray == "undefined") {
