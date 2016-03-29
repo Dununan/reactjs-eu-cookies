@@ -6,46 +6,47 @@ import Lang from './Lang';
 export default class EuCookies extends React.Component {
 
 	constructor(props) {
-	    super(props);
-	    this.state = {
-	    	show: true, 
-	    	showHideEffect: false, 
-	    	height: 0,
-	    	lang: this.getLanguage(props.lang)
-	    };
-  	}
+		super(props);
+		this.state = {
+			show: true, 
+			showHideEffect: false, 
+			height: 0,
+			lang: this.getLanguage(props.lang),
+			link: props.link ? props.link : "http://www.aboutcookies.org/default.aspx?page=5"
+		};
+	}
 
 
-  	getLanguage(forced) {
-  		let lang = (navigator.language || navigator.userLanguage).substring(0,2);
+	getLanguage(forced) {
+		let lang = (navigator.language || navigator.userLanguage).substring(0,2);
 
-  		if(typeof forced != "undefined") {
-  			lang = forced;
-  		}
+		if(typeof forced != "undefined") {
+			lang = forced;
+		}
  
-  		if(typeof Lang[lang] == "undefined") {
-  			lang = "en";
+		if(typeof Lang[lang] == "undefined") {
+			lang = "en";
 		}
 
-  		return lang;
-  	}
+		return lang;
+	}
 
 
-  	cookiesAccepted() {
-  		this.setState({showHideEffect: true});
-  		this.setHideToCookies();
-  		setTimeout(() => this.setState({show: false}), 800); 
-  	}
+	cookiesAccepted() {
+		this.setState({showHideEffect: true});
+		this.setHideToCookies();
+		setTimeout(() => this.setState({show: false}), 800); 
+	}
 
 
-  	setHideToCookies() {
-  		let date = new Date();
-	    date.setFullYear(date.getFullYear() + 10);
-	    document.cookie = 'euCookiesAccepted=1; path=/; expires=' + date.toGMTString();
-  	}
+	setHideToCookies() {
+		let date = new Date();
+		date.setFullYear(date.getFullYear() + 10);
+		document.cookie = 'euCookiesAccepted=1; path=/; expires=' + date.toGMTString();
+	}
 
 
-  	getCookies() {
+	getCookies() {
 		let cookies = {};
 		for (let cookie of document.cookie.split('; ')) {
 			let [name, value] = cookie.split("=");
@@ -57,12 +58,12 @@ export default class EuCookies extends React.Component {
 
 	onResizeWindow() {
 		if (window.resizeTimeOut != null)
-		        clearTimeout(window.resizeTimeOut);
+				clearTimeout(window.resizeTimeOut);
 
-	    window.resizeTimeOut = setTimeout(() => {
-	    	this.setState({height: 0});
-	    	setTimeout(() => {this.setState({height: React.findDOMNode(this).offsetHeight})}, 100);
-	    }, 400);
+		window.resizeTimeOut = setTimeout(() => {
+			this.setState({height: 0});
+			setTimeout(() => {this.setState({height: React.findDOMNode(this).offsetHeight})}, 100);
+		}, 400);
 	}
 
 
@@ -74,20 +75,20 @@ export default class EuCookies extends React.Component {
 	}
 
 
-  	componentDidMount() {
-  		this.setState({height: React.findDOMNode(this).offsetHeight});
+	componentDidMount() {
+		this.setState({height: React.findDOMNode(this).offsetHeight});
 
-  		window.resizeTimeOut = null;
+		window.resizeTimeOut = null;
 
 		window.onresize = () => this.onResizeWindow.bind(this);
 
 		//IE8 and older Fix
 		if(typeof Array.isArray == "undefined") {
 			Array.isArray = function (obj) {
-    			return Object.prototype.toString.call(obj) === "[object Array]";
+				return Object.prototype.toString.call(obj) === "[object Array]";
 			};
 		}
-  	}
+	}
 
 
 	render() {
@@ -108,7 +109,7 @@ export default class EuCookies extends React.Component {
 					<div>
 						{Lang[this.state.lang].text}
 						<button onClick={this.cookiesAccepted.bind(this)}>{Lang[this.state.lang].btn}</button>
-						<a href="http://www.aboutcookies.org/default.aspx?page=5" target="_blank">{Lang[this.state.lang].link}</a>
+						<a href={this.state.link} target="_blank">{Lang[this.state.lang].link}</a>
 					</div>
 				</div>;
   }
