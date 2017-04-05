@@ -12,7 +12,7 @@ npm install reactjs-eu-cookies
 
 ### Using
 ```javascript
-import EuCookies from 'EuCookies';  
+import EuCookies from 'reactjs-eu-cookies';  
 // OR
 var EuCookies = require('EuCookies')
 
